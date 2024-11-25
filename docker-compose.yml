@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  nest-app:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    depends_on:
+      - redis-container
+    ports:
+      - 1125:1125
+    networks:
+      - common-network
+  redis-container:
+    image: redis
+    networks:
+      - common-network
+networks:
+  common-network:
+    driver: bridge
