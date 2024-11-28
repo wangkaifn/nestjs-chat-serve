@@ -7,6 +7,7 @@ import {
   HttpException,
   HttpStatus,
   Query,
+  Delete,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
@@ -19,11 +20,17 @@ export class MessageController {
 
   // 发送消息
   @Post('create')
-  async sendMessage(@Body() createMessageDto: CreateMessageDto) {
-    console.log('createMessageDto', createMessageDto);
+  async sendMessage(
+    @Body() createMessageDto: CreateMessageDto,
+    @Query('model') model: string,
+  ) {
+    console.log('createMessageDto', createMessageDto, model);
 
     try {
-      const result = await this.messageService.createMessage(createMessageDto);
+      const result = await this.messageService.createMessage(
+        createMessageDto,
+        model,
+      );
       return result;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -42,6 +49,19 @@ export class MessageController {
         limit,
       );
       return history;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // 删除当前会话内的消息
+
+  @Delete('deleteMessageByConversationId')
+  async deleteMessage(@Body('conversationId') conversationId: string) {
+    try {
+      const result =
+        await this.messageService.clearConversationHistory(conversationId);
+      return result;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }

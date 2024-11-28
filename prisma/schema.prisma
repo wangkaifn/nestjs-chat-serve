@@ -59,3 +59,19 @@ model Message {
   @@index([conversationId])
   @@index([userId])
 }
+
+model GPTModel {
+  id           Int         @id @default(autoincrement())
+  name         String
+  desc         String?
+  GPTCompany   GPTCompany? @relation(fields: [gPTCompanyId], references: [id])
+  gPTCompanyId Int?
+}
+
+// 公司模型
+model GPTCompany {
+  id     Int        @id @default(autoincrement()) // 主键，自动递增
+  name   String     @unique // 公司名称，唯一
+  models GPTModel[] // 与模型的关系，一对多
+  desc   String?
+}

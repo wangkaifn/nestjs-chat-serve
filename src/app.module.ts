@@ -14,6 +14,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { EmailModule } from './email/email.module';
 import { ConversationModule } from './conversation/conversation.module';
 import { MessageModule } from './message/message.module';
+import { GptModelModule } from './gpt-model/gpt-model.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -40,6 +41,7 @@ import { MessageModule } from './message/message.module';
     EmailModule,
     ConversationModule,
     MessageModule,
+    GptModelModule,
   ],
   controllers: [],
   providers: [

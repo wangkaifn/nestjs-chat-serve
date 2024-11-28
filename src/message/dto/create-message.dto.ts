@@ -1,14 +1,14 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { Role } from '@prisma/client';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+// import { Role } from '@prisma/client';
 
 export class CreateMessageDto {
   @IsString()
   @IsNotEmpty()
   content: string;
 
-  @IsEnum(Role)
+  // @IsEnum(Role)
   @IsOptional()
-  role?: Role;
+  role?: string;
 
   @IsString()
   @IsNotEmpty()

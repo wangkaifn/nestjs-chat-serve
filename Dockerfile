@@ -1,28 +1,26 @@
-FROM node:20-alpine AS base
+# 第一阶段：构建阶段
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json .
-
-RUN npm config set registry https://registry.npmmirror.com/
+COPY package*.json ./
 RUN npm install
 
 COPY . .
-
 RUN npm run build
 
-# production stage
-FROM node:20-alpine as production-stage
-
-COPY --from=build-stage /app/dist /app
-COPY --from=build-stage /app/package.json /app/package.json
+# 第二阶段：运行阶段
+FROM node:18-alpine
 
 WORKDIR /app
 
-RUN npm config set registry https://registry.npmmirror.com/
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
 
 RUN npm install --production
 
-EXPOSE 1125
+ENV PORT 3000
+EXPOSE 3000
 
-CMD ["node", "/app/main.js"]
+CMD ["npm", "start"]
